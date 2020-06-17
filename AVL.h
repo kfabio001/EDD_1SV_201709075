@@ -3,7 +3,7 @@
 // Arbol AVL en C++
 // (C) Mayo 2002, Salvador Pozo
 // C con Clase: http://c.conclase.net
-
+//#include "Operaciones.h"
 #include <iostream>
 using namespace std;
 
@@ -13,15 +13,19 @@ class AVL;
 class NodoV {
   public:
    // Constructor:
-   NodoV(const int dat,string nom, NodoV *pad=NULL, NodoV *izq=NULL, NodoV *der=NULL) :
-     dato(dat), nombre(nom), padre(pad), izquierdo(izq), derecho(der), FE(0) {}
+   NodoV(const int dat,string nom, string alp,bool est,NodoV *pad=NULL, NodoV *izq=NULL, NodoV *der=NULL) :
+     dato(dat), nombre(nom), alpa(alp),estado(est), padre(pad), izquierdo(izq), derecho(der), FE(0) {}
    // Miembros:
    int dato;
    int FE;
    string nombre;
+   string alpa;
+   bool estado;
+   int altura;
    NodoV *izquierdo;
    NodoV *derecho;
    NodoV *padre;
+
    friend class AVL;
 };
 
@@ -39,7 +43,24 @@ class AVL {
    AVL() : raiz(NULL), actual(NULL) {}
    ~AVL() { Podar(raiz); }
    // Insertar en árbol ordenado:
-   void Insertar(const int dat, string nombre, string disponible, string descripcion);
+   NodoV* insertar(NodoV* raiz,int dat, string nombre,string alpa,bool disponible,string descripcion);
+   NodoV* modificar(NodoV* raiz, string dato,string datoNew);
+   NodoV* simplederechaizquierda(NodoV *temp);
+   NodoV* simplederechaderecha(NodoV *temp);
+   NodoV* doblederechaizquierda(NodoV *temp);
+   NodoV* doblederechaderecha(NodoV *temp);
+   NodoV* valancear(NodoV *raiz,int datoE);
+   void preorder(NodoV *raiz);
+   void enorder(NodoV *raiz);
+   string graficarArbol();
+   void cuerpoArbol(NodoV *temp);
+   int Altura(NodoV* raiz);
+   int AlturaAux2(NodoV* raiz);
+   NodoV* eliminar(NodoV* raiz, int dato);
+   NodoV* inorderE(NodoV* right);
+
+   NodoV* Insertar(NodoV* raiz,const int dat, string nombre,string alpa, bool disponible, string descripcion);
+   void InsertarL(const int dat, string nombre,string alpa, bool disponible, string descripcion);
    // Borrar un elemento del árbol:
    void Borrar(const int dat);
    // Función de búsqueda:
@@ -65,6 +86,9 @@ class AVL {
    void Mostrar();
    void inOrden();
    void inOrden(NodoV * actual);
+   void ino(NodoV *raiz);
+   void ino();
+   NodoV* retornarMatriz(NodoV* raiz);
   private:
    // Funciones de equilibrado:
    void Equilibrar(NodoV *nodo, int, bool);

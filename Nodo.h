@@ -1,7 +1,8 @@
 #ifndef NODO_H
 #define NODO_H
 #include <iostream>
-//using namespace std;
+#include "AVL.h"
+using namespace std;
 class NodoMa
 {
 public:
@@ -12,6 +13,8 @@ public:
     NodoMa * abajo;
     NodoMa * adelante;
     NodoMa * atras;
+
+    AVL* activos;
 
     std::string Nombre;
     std::string contra;
@@ -28,6 +31,7 @@ public:
     Nombre=dato1;
     numero=dato2;
     contra=dato3;
+    //activos=nullptr;
 }
 };
 #endif // NODO_H

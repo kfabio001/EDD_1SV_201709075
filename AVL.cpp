@@ -1,5 +1,8 @@
 #include "AVL.h"
+#include "Operaciones.h"
+#include<time.h>
 // Poda: borrar todos los nodos a partir de uno, incluido
+
 void AVL::Podar(NodoV* &nodo)
 {
    // Algoritmo recursivo, recorrido en postorden
@@ -10,13 +13,187 @@ void AVL::Podar(NodoV* &nodo)
       nodo = NULL;
    }
 }
+NodoV* retornarMatriz(NodoV* raiz){
+    return raiz;
+}
+NodoV* AVL::insertar(NodoV* raiz,int dato, string nombre,string alpa,bool disponible,string descripcion){
+    //Si el arbol esta vacio
+    if (raiz==NULL){
+        raiz = new NodoV(dato,nombre,alpa,true);
+    } else if(dato<raiz->dato){
+        raiz->izquierdo= this->insertar(raiz->izquierdo,dato,nombre,alpa,true,descripcion);
+        //1
+        //altura es para valancear
+        if((Altura(raiz->izquierdo) - Altura(raiz->derecho))==2){
+            if(dato<raiz->izquierdo->dato){
+                raiz= simplederechaizquierda(raiz);
+            }else{
+                raiz= doblederechaizquierda(raiz);
+            }
+        }
+    } else if (dato>raiz->dato){
+        raiz->derecho = this->insertar(raiz->izquierdo,dato,nombre,alpa,true,descripcion);
+        //2
+        //altura es para valancear
+        int der,izq;
+        der=Altura(raiz->derecho);
+        izq=Altura(raiz->izquierdo);
+        if( (der - izq)==2){
+            if(dato>raiz->derecho->dato){
+                raiz= simplederechaderecha(raiz);
+            }else{
+                raiz= doblederechaderecha(raiz);
+            }
+        }
+    }else{
+        cout<<"No se puede insertar datos duplicados"<<endl;
+    }
+    int maximo,de,iz;
+    de= this->Altura(raiz->derecho);
+    iz= this->Altura(raiz->izquierdo);
+    if(de>iz){maximo=de;}else{maximo=iz;}
+    raiz->altura=maximo+1;
+    return raiz;
+}
+int AVL::Altura(NodoV* raiz){
+    if(raiz==NULL){return -1;}
+    int alturaD,alturaI;
+    alturaI = Altura(raiz->izquierdo);
+    alturaD = Altura(raiz->derecho);
+    if(alturaI==-1 && alturaD==-1){return 0;}
+    if(alturaI>alturaD){ return alturaI+1; }else{ return alturaD+1; }
+}
+
+NodoV* AVL::simplederechaizquierda(NodoV *temp){
+    NodoV* temp2;
+    temp2= temp->izquierdo;
+    temp->izquierdo=temp2->derecho;
+    temp2->derecho=temp;
+    temp2->altura = this->AlturaAux2(temp2);
+    return temp2;
+}
+NodoV* AVL::simplederechaderecha(NodoV *temp){
+    NodoV* temp2;
+    temp2= temp->derecho;
+    temp->derecho=temp2->izquierdo;
+    temp2->izquierdo=temp;
+    temp2->altura=this->AlturaAux2(temp2);
+    return temp2;
+}
+NodoV* AVL::doblederechaizquierda(NodoV *temp){
+    temp->izquierdo=this->simplederechaderecha(temp->izquierdo);
+    return simplederechaizquierda(temp);
+}
+NodoV* AVL::doblederechaderecha(NodoV *temp){
+    temp->derecho=this->simplederechaizquierda(temp->derecho);
+    return simplederechaderecha(temp);
+}
+
+int AVL :: AlturaAux2(NodoV* raiz){
+    if(raiz==NULL){return -1;}
+    int alturaD0,alturaI0;
+    alturaI0 = AlturaAux2(raiz->izquierdo);
+    alturaD0 = AlturaAux2(raiz->derecho);
+    if(alturaI0==-1 && alturaD0==-1){raiz->altura=0; return 0;}
+    if(alturaI0>alturaD0){ raiz->altura=alturaI0+1; return alturaI0+1; }else{ raiz->altura=alturaD0+1; return alturaD0+1; }
+}
+
+
+
+
+
+void AVL::preorder(NodoV *raiz){
+    if(raiz==NULL){ return; }
+
+    cout<<raiz->nombre<<"),";
+    preorder(raiz->izquierdo);
+    preorder(raiz->derecho);
+}
+
+void AVL::enorder(NodoV *raiz){
+    if(raiz==NULL){return;}
+
+    enorder(raiz->izquierdo);
+    if(raiz->estado){
+        cout<<"-*- Id: "<<raiz->dato<<"; nombre: "<<raiz->nombre<<endl;
+    }
+    enorder(raiz->derecho);
+}
+
+//Para eliminar
+NodoV* AVL::eliminar(NodoV* raiz,int dato){
+    if(raiz == NULL){
+        return raiz;
+    }
+
+    if(dato<raiz->dato){
+        raiz->izquierdo = eliminar(raiz->izquierdo,dato);
+    }else if(dato>raiz->dato){
+        raiz ->derecho = eliminar(raiz->derecho,dato);
+    }else{
+        if(raiz->izquierdo==NULL){
+            return raiz->derecho;
+        }else if(raiz->derecho==NULL){
+            return raiz->izquierdo;
+        }else{
+            NodoV* ordenar0=inorderE(raiz->derecho);
+            raiz->dato= ordenar0->dato;
+            //raiz->descripcion=ordenar0->descripcion;
+            raiz->estado=ordenar0->estado;
+            raiz->nombre=ordenar0->nombre;
+            raiz->derecho=eliminar(raiz->derecho,raiz->dato);
+        }
+
+    }
+    raiz=this->valancear(raiz,dato);
+    return raiz;
+}
+
+NodoV* AVL::valancear(NodoV *raiz,int datoE){
+    if((Altura(raiz->izquierdo) - Altura(raiz->derecho))==2){
+            if(raiz->dato>raiz->izquierdo->dato){
+                    //va rotar a la izquierda
+                raiz= simplederechaizquierda(raiz);
+            //si sigue des equilibrado va rotar doble
+                if( (Altura(raiz->derecho) - Altura(raiz->izquierdo))==2){
+                raiz= doblederechaderecha(raiz);
+                }
+            }else{
+                raiz= doblederechaizquierda(raiz);
+            }
+    }else if( (Altura(raiz->derecho) - Altura(raiz->izquierdo))==2){
+            if(raiz->dato<raiz->derecho->dato){
+                raiz= simplederechaderecha(raiz);
+                if((Altura(raiz->izquierdo) - Altura(raiz->derecho))==2){
+                    raiz= doblederechaizquierda(raiz);
+                }
+            }else{
+                raiz= doblederechaderecha(raiz);
+            }
+        }
+    return raiz;
+}
+
+NodoV* AVL::inorderE(NodoV* right){
+    while(right->izquierdo!=NULL){
+        right= right->izquierdo;
+    }
+    return right;
+}
+
+
+
+
+
 
 // Insertar un dato en el árbol AVL
-void AVL::Insertar(const int dat, string nombre, string disponible, string descripcion)
+NodoV* AVL::Insertar(NodoV* raiz,const int dat, string nombre,string alpa, bool estado, string descripcion)
 {
-   NodoV *padre = NULL;
-
+NodoV*padre = NULL;
+  // NodoV *padre = NULL;
+//padre=NodoMaR->activos;
    cout << "Insertar: " << dat << endl;
+  // NodoMaR->activos=raiz;
    actual = raiz;
    // Buscar el dato en el árbol, manteniendo un puntero al nodo padre
    while(!Vacio(actual) && dat != actual->dato) {
@@ -26,24 +203,56 @@ void AVL::Insertar(const int dat, string nombre, string disponible, string descr
    }
 
    // Si se ha encontrado el elemento, regresar sin insertar
-   if(!Vacio(actual)) return;
+   if(!Vacio(actual)); //break;
    // Si padre es NULL, entonces el árbol estaba vacío, el nuevo nodo será
    // el nodo raiz
-   if(Vacio(padre)) raiz = new NodoV(dat,"");
+   if(Vacio(padre)) raiz = new NodoV(dat,"","",true);
    // Si el dato es menor que el que contiene el nodo padre, lo insertamos
    // en la rama izquierda
    else if(dat < padre->dato) {
-      padre->izquierdo = new NodoV(dat,"", padre);
+      padre->izquierdo = new NodoV(dat,"","", padre);
       Equilibrar(padre, IZQUIERDO, true);
    }
    // Si el dato es mayor que el que contiene el nodo padre, lo insertamos
    // en la rama derecha
    else if(dat > padre->dato) {
-      padre->derecho = new NodoV(dat,"", padre);
+      padre->derecho = new NodoV(dat,"","", padre);
       Equilibrar(padre, DERECHO, true);
    }
 }
+void AVL::InsertarL(const int dat, string nombre,string alpa, bool estado, string descripcion)
+{
+//padre = NULL;
+   NodoV *padre = NULL;
+//padre=NodoMaR->activos;
+   cout << "Insertar: " << dat << endl;
+  // NodoMaR->activos=raiz;
+   actual = raiz;
+   // Buscar el dato en el árbol, manteniendo un puntero al nodo padre
+   while(!Vacio(actual) && dat != actual->dato) {
+      padre = actual;
+      if(dat > actual->dato) actual = actual->derecho;
+      else if(dat < actual->dato) actual = actual->izquierdo;
+   }
 
+   // Si se ha encontrado el elemento, regresar sin insertar
+   if(!Vacio(actual)) return; //break;
+   // Si padre es NULL, entonces el árbol estaba vacío, el nuevo nodo será
+   // el nodo raiz
+   if(Vacio(padre)) raiz = new NodoV(dat,"","",true);
+   // Si el dato es menor que el que contiene el nodo padre, lo insertamos
+   // en la rama izquierda
+   else if(dat < padre->dato) {
+      padre->izquierdo = new NodoV(dat,"","", padre);
+      Equilibrar(padre, IZQUIERDO, true);
+   }
+   // Si el dato es mayor que el que contiene el nodo padre, lo insertamos
+   // en la rama derecha
+   else if(dat > padre->dato) {
+      padre->derecho = new NodoV(dat,"","", padre);
+      Equilibrar(padre, DERECHO, true);
+   }
+}
 // Equilibrar árbol AVL partiendo del nodo nuevo
 void AVL::Equilibrar(NodoV *nodo, int rama, bool nuevo)
 {
@@ -311,10 +520,14 @@ void AVL::PostOrden(void (*func)(int&, int), NodoV *nodo, bool r)
 bool AVL::Buscar(const int dat)
 {
    actual = raiz;
+   AVL *arbol= new AVL();
 
    // Todavía puede aparecer, ya que quedan nodos por mirar
    while(!Vacio(actual)) {
-      if(dat == actual->dato) return true; // dato encontrado
+      if(dat == actual->dato){
+          cout<<actual->nombre;
+            cout<<actual->dato;
+          return true;} // dato encontrado
       else if(dat > actual->dato) actual = actual->derecho; // Seguir
       else if(dat < actual->dato) actual = actual->izquierdo;
    }
@@ -398,71 +611,66 @@ void Mostrar(int &d, int FE)
    cout << d << "(" << FE << "),";
 }
 
-int main()
+void AVL::ino()
 {
-   // Un árbol de enteros
-   AVL ArbolInt;
+    cout << endl;
+
+    ino(raiz);
+
+}
+void AVL::ino(NodoV *raiz){
+
+        if(raiz==NULL){return;}
+
+        ino(raiz->izquierdo);
+        if(raiz->estado){
+            cout<<"-*- Id: "<<raiz->dato<<"; nombre: "<<raiz->nombre<<endl;
+        }
+        ino(raiz->derecho);
+
+}
+
+//int main()
+//{
+
+//  Operaciones *op= new Operaciones();
+//  MatrizH *mat=new MatrizH();
+
+//  //op->jugar();
+//  op->primero();
+//   // Un árbol de enteros
+//   AVL ArbolInt;
 
    // Inserción de nodos en árbol:
-   ArbolInt.Insertar(1,"nombre1","disponible","descripcion");
-   ArbolInt.Insertar(2,"nombre2","disponible","descripcion");
-   ArbolInt.Insertar(3,"nombre3","disponible","descripcion");
-   ArbolInt.Insertar(4,"nombre4","disponible","descripcion");
-   ArbolInt.Insertar(15,"nombre15","disponible","descripcion");
-   ArbolInt.Insertar(16,"nombre16","disponible","descripcion");
-   ArbolInt.Insertar(17,"nombre17","disponible","descripcion");
 
-//   ArbolInt.Insertar(4);
-//   ArbolInt.Insertar(20);
-//   ArbolInt.Insertar(3);
-//   ArbolInt.Insertar(25);
-//   ArbolInt.Insertar(6);
-//   ArbolInt.Insertar(8);*/
-//   ArbolInt.Insertar(1);
-//   ArbolInt.Insertar(2);
-//   ArbolInt.Insertar(3);
-//   ArbolInt.Insertar(4);
-//   ArbolInt.Insertar(5);
-//   ArbolInt.Insertar(6);
-//   ArbolInt.Insertar(7);
-//   ArbolInt.Insertar(8);
-//   ArbolInt.Insertar(9);
-//   ArbolInt.Insertar(10);
-//   ArbolInt.Insertar(11);
-//   ArbolInt.Insertar(12);
-//   ArbolInt.Insertar(13);
-//   ArbolInt.Insertar(14);
-//   ArbolInt.Insertar(15);
-//   ArbolInt.Insertar(16);
+//   cout << "Altura de arbol " << ArbolInt.AlturaArbol() << endl;
 
-   cout << "Altura de arbol " << ArbolInt.AlturaArbol() << endl;
+//   // Mostrar el árbol en tres ordenes distintos:
+//   cout << "InOrden: ";
+//   ArbolInt.InOrden(Mostrar);
+//   cout << endl;
+//   cout << "PreOrden: ";
+//   ArbolInt.PreOrden(Mostrar);
+//   cout << endl;
+//   cout << "PostOrden: ";
+//   ArbolInt.PostOrden(Mostrar);
+//   cout << endl;
 
-   // Mostrar el árbol en tres ordenes distintos:
-   cout << "InOrden: ";
-   ArbolInt.InOrden(Mostrar);
-   cout << endl;
-   cout << "PreOrden: ";
-   ArbolInt.PreOrden(Mostrar);
-   cout << endl;
-   cout << "PostOrden: ";
-   ArbolInt.PostOrden(Mostrar);
-   cout << endl;
+//   ArbolInt.Borrar(8);
+//   ArbolInt.Borrar(11);
 
-   ArbolInt.Borrar(8);
-   ArbolInt.Borrar(11);
+//   cout << "Altura de arbol " << ArbolInt.AlturaArbol() << endl;
 
-   cout << "Altura de arbol " << ArbolInt.AlturaArbol() << endl;
-
-   // Mostrar el árbol en tres ordenes distintos:
-   cout << "InOrden: ";
-   ArbolInt.InOrden(Mostrar);
-   cout << endl;
-   cout << "PreOrden: ";
-   ArbolInt.PreOrden(Mostrar);
-   cout << endl;
-   cout << "PostOrden: ";
-   ArbolInt.PostOrden(Mostrar);
-   cout << endl;
+//   // Mostrar el árbol en tres ordenes distintos:
+//   cout << "InOrden: ";
+//   ArbolInt.InOrden(Mostrar);
+//   cout << endl;
+//   cout << "PreOrden: ";
+//   ArbolInt.PreOrden(Mostrar);
+//   cout << endl;
+//   cout << "PostOrden: ";
+//   ArbolInt.PostOrden(Mostrar);
+//   cout << endl;
 
 /*   // Borraremos algunos elementos:
    cout << "N nodos: " << ArbolInt.NumeroNodos() << endl;
@@ -525,6 +733,6 @@ int main()
    cout << "Borrar 'buenos': ";
    ArbolCad.InOrden(Mostrar);
    cout << endl; */
-   cin.get();
-   return 0;
-}
+//   cin.get();
+//   return 0;
+//}
