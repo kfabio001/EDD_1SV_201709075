@@ -2,12 +2,12 @@
 #define ARBOL_H
 #include <fstream>
 #include <string.h>
+#include <string>
 #include <iostream>
-#include "ListaSimple.h"
-#include "ListaDoble.h"
+#include "ListaD.h"
 
-//Arbol ABB Usuarios de juego
 using namespace std;
+
 typedef class Nodo Nodo;
 typedef class Arbol Arbol;
 typedef class Jugador Jugador;
@@ -24,20 +24,19 @@ class Nodo
 class Jugador{
 	public:
 	int puntaje;
-	ListaDoble *fichasJugador;
+	ListaD *fichasJugador;//////////////error
 	char * nombre;
 	Jugador(char *nombre);
-	ListaSimple *listapunteo;
 	
 };
-
+//
 class Arbol
 {
 	public:
 	Nodo * raiz;
 	string texto;
 	Arbol();
-    Nodo * buscar(char * info);
+	Nodo * buscar(char * info);
     Nodo * buscar(Nodo * actual, char * info);
     bool insertar(char * info);
     bool insertar(Nodo * actual, Nodo * nuevo);
@@ -52,17 +51,16 @@ class Arbol
     int getNodosHoja();
     int getNodosHoja(Nodo * actual);
     Nodo * reporte(Nodo *actual);
-    void reporte();
+	void reporte();
     Nodo * reportePreorden(Nodo *actual);
     void reportePreorden();
     Nodo * reporteInorden(Nodo *actual);
-    void reporteInorden();
-    Nodo * reportePostorden(Nodo *actual);
-    void reportePostorden();
+	void reporteInorden();
+	Nodo * reportePostorden(Nodo *actual);
+	void reportePostorden();
     
 
 };
 
 #endif // ARBOL_H
-
 
