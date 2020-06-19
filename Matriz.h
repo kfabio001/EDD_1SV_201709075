@@ -11,24 +11,25 @@ class Matriz
 public:
     NodoMatriz *root;
     Matriz();
-    string cuerpoGraph;
+    string cuerpoArbolDot;
     int contadorCata;
     int contadorN;
     virtual ~Matriz();
     void imprimir();
-    void grafo();
+    void graficar();
     void obtenerRaices();
     void obtenerRaicesUsuario(string *usuario);
-    void obtenerUsuario(string us,string id,string usuario);
-    void insertarNodoMatriz(string name,string empresa,string departamento,string nick,string contra,int contador);
-    void grafhMatriz(string nombre);
-    NodoMatriz* siExiste(string usuario,string departamento,string empresa);
-    NodoMatriz* siExisteEmp(string empresa);
-    NodoMatriz* crearEmpresa(string nombre);
-    NodoMatriz* crearDepartamento(string temp);
-    NodoMatriz* BuscarEmpresa(string temp);
-    NodoMatriz* BuscarDepartamento(string temp);
-    NodoArbol* BuscarActivo(string id);
+    void obtenerUsuario(string us,string id,string user);
+    void insertarNodoMatriz(string name,string empresa,string departamento,string nameuser,string password,int contador);
+    void graficarMatriz(string nombre);
+    void cuerpoArbol(NodoArbol *temp);
+    NodoMatriz* existe(string user,string departamento,string empresa);
+    NodoMatriz* existeEmp(string empresa);
+    NodoMatriz* createEmpresa(string name);
+    NodoMatriz* createDepartamento(string name);
+    NodoMatriz* searchEmpresa(string name);
+    NodoMatriz* searchDepartamento(string name);
+    NodoArbol* serachActivo(string id);
 protected:
 
 private:

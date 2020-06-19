@@ -23,9 +23,9 @@ public:
     NodoMatriz* obtener;
     string cuerpoDot;
     NodoArbol* root;
-    string grafoArbol();
+    string graficarArbol();
     int contadorCata;
-    void llenar(NodoArbol *temp);
+    void cuerpoArbol(NodoArbol *temp);
     void addActivo();
     void eliminarActivo();
     void modificarActivo();

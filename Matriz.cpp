@@ -9,190 +9,159 @@ Matriz::Matriz()
     this->root = new NodoMatriz("root",-1,"admin","admin");
     this->contadorN = 0;
 }
+
+NodoMatriz* Matriz::createEmpresa(string name){
+    NodoMatriz* empresaC = new NodoMatriz(name,contadorN++,"","");
+
+    NodoMatriz* temp = this->root;
+    while(temp->abajo!=NULL){
+        temp=temp->abajo;
+    }
+    temp->abajo=empresaC;
+    empresaC->arriba=temp;
+
+    return empresaC;
+}
+
+
+NodoMatriz* Matriz::createDepartamento(string name){
+    NodoMatriz* departamentoC = new NodoMatriz(name,contadorN++,"","");
+
+    NodoMatriz* temp = this->root;
+    while(temp->derecho!=NULL){
+        temp=temp->derecho;
+    }
+    temp->derecho=departamentoC;
+    departamentoC->izquierdo=temp;
+    return departamentoC;
+}
+
+
+
+NodoMatriz* Matriz::searchEmpresa(string nombre){
+    NodoMatriz *temp = this->root;
+    while(temp!=NULL){
+        if(temp->nombre==nombre){
+            return temp;
+        }
+        temp=temp->abajo;
+    }
+    return NULL;
+}
+
+NodoMatriz* Matriz::searchDepartamento(string nombre){
+    NodoMatriz *temp = this->root;
+    while(temp!=NULL){
+        if(temp->nombre==nombre){
+            return temp;
+        }
+        temp=temp->derecho;
+    }
+    return NULL;
+}
+
 void Matriz::obtenerRaices(){
-    NodoMatriz *aux=this->root;
+    NodoMatriz *temp=this->root;
 
-    while(aux!=NULL){
-        if(aux->derecho!=NULL){
-
-        }
-        aux= aux->derecho;
-    }
-    aux=this->root;
-    while(aux!=NULL){
-        if(aux->abajo!=NULL){
+    while(temp!=NULL){
+        if(temp->derecho!=NULL){
 
         }
-        aux= aux->abajo;
+        temp= temp->derecho;
     }
-    aux=this->root;
-    aux=aux->derecho;
-    while(aux!=NULL){
-        NodoMatriz *temp= aux;
+    temp=this->root;
+    while(temp!=NULL){
+        if(temp->abajo!=NULL){
+
+        }
+        temp= temp->abajo;
+    }
+    temp=this->root;
+    temp=temp->derecho;
+    while(temp!=NULL){
+        NodoMatriz *temp2= temp;
         NodoArbol *temp3;
         Avlt*temp4;
         Interfaz*temp5;
-        temp=temp->abajo;
+        temp2=temp2->abajo;
 
-        while(temp!=NULL){
-            cout<<temp->nombre+" v "<<" ";
+        while(temp2!=NULL){
+            cout<<temp2->nombre+" v "<<" ";
 
-            temp4->inorden(temp->tAvl->root);
+            temp4->inorden(temp2->tAvl->root);
 
-            temp4->enorderR(temp->tAvl->root);
+            temp4->enorderR(temp2->tAvl->root);
 
 
-            temp=temp->abajo;
+            temp2=temp2->abajo;
         }
-        aux=aux->derecho;
+        temp=temp->derecho;
     }
-    aux=this->root;
-    aux=aux->abajo;
-    while(aux!=NULL){
-        NodoMatriz *temp2= aux;
+    temp=this->root;
+    temp=temp->abajo;
+    while(temp!=NULL){
+        NodoMatriz *temp2= temp;
         temp2=temp2->derecho;
 
         while(temp2!=NULL){
 
             temp2=temp2->derecho;
         }
-        aux=aux->abajo;
+        temp=temp->abajo;
     }
 }
-
-NodoMatriz* Matriz::crearEmpresa(string nombre){
-    NodoMatriz* creada = new NodoMatriz(nombre,contadorN++,"","");
-    NodoMatriz* aux = this->root;
-    while(aux->abajo!=NULL){
-        aux=aux->abajo;
-    }
-    aux->abajo=creada;
-    creada->arriba=aux;
-
-    return creada;
-}
-
-
-NodoMatriz* Matriz::crearDepartamento(string nombre){
-    NodoMatriz* creada = new NodoMatriz(nombre,contadorN++,"","");
-
-    NodoMatriz* aux = this->root;
-    while(aux->derecho!=NULL){
-        aux=aux->derecho;
-    }
-    aux->derecho=creada;
-    creada->izquierdo=aux;
-    return creada;
-}
-NodoMatriz* Matriz::siExisteEmp(string empresa)
-{
-    NodoMatriz *usuarioNodo=NULL;
-    NodoMatriz *empresaNodo;
-
-    empresaNodo= this->BuscarEmpresa(empresa);
-
-    if(empresaNodo!=NULL){
-        NodoMatriz *tempE=empresaNodo->derecho;
-
-        while(tempE!=NULL){
-
-            NodoMatriz *tempD=tempE->arriba;
-            while(tempD->arriba!=NULL){
-                tempD=tempD->arriba;
-            }
-
-                NodoMatriz *tempU=tempE;
-                return tempU;
-                cout<<"usuario ya existenete\n"<<tempU->nombre;
-                while(tempU->atras!=NULL){
-                    tempU=tempU->atras;
-                    return tempU;
-                cout<<"usuario ya existenete\n"<<tempU->nombre;
-                }
-
-            tempE=tempE->derecho;
-
-        }
-    }
-    return usuarioNodo;
-}
-
-
-NodoMatriz* Matriz::BuscarEmpresa(string nombre){
-    NodoMatriz *aux = this->root;
-    while(aux!=NULL){
-        if(aux->nombre==nombre){
-            return aux;
-        }
-        aux=aux->abajo;
-    }
-    return NULL;
-}
-
-NodoMatriz* Matriz::BuscarDepartamento(string nombre){
-    NodoMatriz *aux = this->root;
-    while(aux!=NULL){
-        if(aux->nombre==nombre){
-            return aux;
-        }
-        aux=aux->derecho;
-    }
-    return NULL;
-}
-
-
 void Matriz::obtenerRaicesUsuario(string* usuario){
-    NodoMatriz *aux=this->root;
+    NodoMatriz *temp=this->root;
 
-    while(aux!=NULL){
-        if(aux->derecho!=NULL){
-
-        }
-        aux= aux->derecho;
-    }
-    aux=this->root;
-    while(aux!=NULL){
-        if(aux->abajo!=NULL){
+    while(temp!=NULL){
+        if(temp->derecho!=NULL){
 
         }
-        aux= aux->abajo;
+        temp= temp->derecho;
     }
-    aux=this->root;
-    aux=aux->derecho;
-    while(aux!=NULL){
-        NodoMatriz *temp= aux;
+    temp=this->root;
+    while(temp!=NULL){
+        if(temp->abajo!=NULL){
+
+        }
+        temp= temp->abajo;
+    }
+    temp=this->root;
+    temp=temp->derecho;
+    while(temp!=NULL){
+        NodoMatriz *temp2= temp;
         NodoArbol *temp3;
         Avlt*temp4;
         Interfaz*temp5;
-        temp=temp->abajo;
+        temp2=temp2->abajo;
 
-        while(temp!=NULL){
-            cout<<temp->nombre+" v "<<" ";
+        while(temp2!=NULL){
+            cout<<temp2->nombre+" v "<<" ";
 
-            if(temp->nombre==usuario->c_str()){
+            if(temp2->nombre==usuario->c_str()){
                cout<<" lo encontro";
 
             }
 
-            temp4->inorden(temp->tAvl->root);
+            temp4->inorden(temp2->tAvl->root);
 
-            temp4->enorderR(temp->tAvl->root);
+            temp4->enorderR(temp2->tAvl->root);
 
-            temp=temp->abajo;
+            temp2=temp2->abajo;
         }
-        aux=aux->derecho;
-    }
-    aux=this->root;
-    aux=aux->abajo;
-    while(aux!=NULL){
-        NodoMatriz *temp= aux;
         temp=temp->derecho;
+    }
+    temp=this->root;
+    temp=temp->abajo;
+    while(temp!=NULL){
+        NodoMatriz *temp2= temp;
+        temp2=temp2->derecho;
 
-        while(temp!=NULL){
+        while(temp2!=NULL){
 
-            temp=temp->derecho;
+            temp2=temp2->derecho;
         }
-        aux=aux->abajo;
+        temp=temp->abajo;
     }
 }
 void Matriz::obtenerUsuario(string us,string nombre,string user){
@@ -246,17 +215,17 @@ void Matriz::obtenerUsuario(string us,string nombre,string user){
 }
 
 void Matriz::insertarNodoMatriz(string name,string empresa,string departamento,string nameuser,string password,int contador){
-    NodoMatriz *NodoUser;
-    NodoMatriz *empresaNodo;
-    NodoMatriz *departamentoNodo;
+    NodoMatriz *user;
+    NodoMatriz *empresaN;
+    NodoMatriz *departamentoN;
 
-    NodoUser = new NodoMatriz(name,contador++,nameuser,password);
+    user = new NodoMatriz(name,contador++,nameuser,password);
 
-    empresaNodo= this->BuscarEmpresa(empresa);
-    departamentoNodo = this->BuscarDepartamento(departamento);
+    empresaN= this->searchEmpresa(empresa);
+    departamentoN = this->searchDepartamento(departamento);
 
-    if(empresaNodo!=NULL && departamentoNodo!=NULL){
-        NodoMatriz *tempE=empresaNodo->derecho;
+    if(empresaN!=NULL && departamentoN!=NULL){
+        NodoMatriz *tempE=empresaN->derecho;
 
         while(tempE!=NULL){
 
@@ -266,18 +235,13 @@ void Matriz::insertarNodoMatriz(string name,string empresa,string departamento,s
             }
             if(tempD->nombre==departamento){
                 NodoMatriz *tempU=tempE;
-                if(tempU->nick==NodoUser->nick)
-                {cout<<"usuario ya existenete\n";
-                    return;}
+                if(tempU->nick==user->nick){cout<<"usuario ya existenete\n"; return;}
                 while(tempU->atras!=NULL){
                     tempU=tempU->atras;
-                    if(tempU->nick==NodoUser->nick)
-                    {cout<<"usuario ya existenete\n";
-                        return;
-                    }
+                    if(tempU->nick==user->nick){cout<<"usuario ya existenete\n"; return;}
                 }
-                tempU->atras=NodoUser;
-                NodoUser->adelante=tempU;
+                tempU->atras=user;
+                user->adelante=tempU;
                 return;
             }
             tempE=tempE->derecho;
@@ -285,26 +249,22 @@ void Matriz::insertarNodoMatriz(string name,string empresa,string departamento,s
         }
     }
 
-    if(empresaNodo==NULL){
-        empresaNodo = this->crearEmpresa(empresa);
-    }
-    if(departamentoNodo==NULL){
-        departamentoNodo = this->crearDepartamento(departamento);
-    }
+    if(empresaN==NULL){ empresaN = this->createEmpresa(empresa); }
+    if(departamentoN==NULL){ departamentoN = this->createDepartamento(departamento); }
 
 
-    if(departamentoNodo->abajo==NULL){
-        departamentoNodo->abajo=NodoUser;
-        NodoUser->arriba=departamentoNodo;
-    }else if (empresaNodo->abajo==NULL){
-        NodoMatriz* auxiliar = departamentoNodo->abajo;
+    if(departamentoN->abajo==NULL){
+        departamentoN->abajo=user;
+        user->arriba=departamentoN;
+    }else if (empresaN->abajo==NULL){
+        NodoMatriz* auxiliar = departamentoN->abajo;
         while(auxiliar->abajo!=NULL){
             auxiliar = auxiliar->abajo;
         }
-        auxiliar->abajo = NodoUser;
-        NodoUser->arriba = auxiliar;
+        auxiliar->abajo = user;
+        user->arriba = auxiliar;
     }else{
-        NodoMatriz* auxD = departamentoNodo;
+        NodoMatriz* auxD = departamentoN;
 
         do{
             auxD = auxD->abajo;
@@ -314,35 +274,35 @@ void Matriz::insertarNodoMatriz(string name,string empresa,string departamento,s
             }
             while(auxE->arriba!=NULL){
                 if(auxE->nombre==empresa){
-                    NodoUser->abajo=auxD;
-                    NodoUser->arriba=auxD->arriba;
+                    user->abajo=auxD;
+                    user->arriba=auxD->arriba;
 
-                    auxD->arriba->abajo=NodoUser;
-                    auxD->arriba=NodoUser;
+                    auxD->arriba->abajo=user;
+                    auxD->arriba=user;
                 }
                 auxE=auxE->arriba;
             }
-        }while(auxD->abajo!=NULL && NodoUser->arriba==NULL);
+        }while(auxD->abajo!=NULL && user->arriba==NULL);
 
-        if(NodoUser->arriba==NULL){
-            auxD->abajo=NodoUser;
-            NodoUser->arriba=auxD;
+        if(user->arriba==NULL){
+            auxD->abajo=user;
+            user->arriba=auxD;
         }
     }
 
 
-    if(empresaNodo->derecho==NULL){
-        empresaNodo->derecho = NodoUser;
-        NodoUser->izquierdo =empresaNodo;
-    }else if(departamentoNodo->derecho==NULL){
-        NodoMatriz * auxiliar2 = empresaNodo->derecho;
+    if(empresaN->derecho==NULL){
+        empresaN->derecho = user;
+        user->izquierdo =empresaN;
+    }else if(departamentoN->derecho==NULL){
+        NodoMatriz * auxiliar2 = empresaN->derecho;
         while(auxiliar2->derecho!=NULL){
             auxiliar2=auxiliar2->derecho;
         }
-        auxiliar2->derecho=NodoUser;
-        NodoUser->izquierdo = auxiliar2;
+        auxiliar2->derecho=user;
+        user->izquierdo = auxiliar2;
     }else{
-        NodoMatriz* auxE = empresaNodo;
+        NodoMatriz* auxE = empresaN;
 
         do{
             auxE = auxE->derecho;
@@ -352,75 +312,101 @@ void Matriz::insertarNodoMatriz(string name,string empresa,string departamento,s
             }
             while(auxD->izquierdo!=NULL){
                 if(auxD->nombre==departamento){
-                    NodoUser->derecho=auxE;
-                    NodoUser->izquierdo=auxE->izquierdo;
+                    user->derecho=auxE;
+                    user->izquierdo=auxE->izquierdo;
 
-                    auxE->izquierdo->derecho=NodoUser;
-                    auxE->izquierdo=NodoUser;
+                    auxE->izquierdo->derecho=user;
+                    auxE->izquierdo=user;
                     break;
                 }
                 auxD=auxD->izquierdo;
             }
-        }while(auxE->derecho!=NULL && NodoUser->izquierdo==NULL);
-        if(NodoUser->izquierdo==NULL){
-            auxE->derecho=NodoUser;
-            NodoUser->izquierdo=auxE;
+        }while(auxE->derecho!=NULL && user->izquierdo==NULL);
+        if(user->izquierdo==NULL){
+            auxE->derecho=user;
+            user->izquierdo=auxE;
         }
     }
 
 }
 
-NodoMatriz* Matriz::siExiste(string usuarioN,string departamento,string empresa)
+NodoMatriz* Matriz::existe(string user,string departamento,string empresa)
 {
-    NodoMatriz *NodoUsuario=NULL;
-    NodoMatriz *empresaNodo;
-    NodoMatriz *departamentoNodo;
-    empresaNodo= this->BuscarEmpresa(empresa);
-    departamentoNodo = this->BuscarDepartamento(departamento);
-    if(empresaNodo!=NULL && departamentoNodo!=NULL){
-        NodoMatriz *tempEmpre=empresaNodo->derecho;
+    NodoMatriz *userR=NULL;
+    NodoMatriz *empresaN;
+    NodoMatriz *departamentoN;
+    empresaN= this->searchEmpresa(empresa);
+    departamentoN = this->searchDepartamento(departamento);
+    if(empresaN!=NULL && departamentoN!=NULL){
+        NodoMatriz *tempE=empresaN->derecho;
 
-        while(tempEmpre!=NULL){
+        while(tempE!=NULL){
 
-            NodoMatriz *tempDep=tempEmpre->arriba;
-            while(tempDep->arriba!=NULL){
-                tempDep=tempDep->arriba;
+            NodoMatriz *tempD=tempE->arriba;
+            while(tempD->arriba!=NULL){
+                tempD=tempD->arriba;
             }
-            if(tempDep->nombre==departamento){
-                NodoMatriz *tempUser=tempEmpre;
-                if(tempUser->nombre==usuarioN)
-                {cout<<"usuario ya existenete\n";
-                    return tempUser;
-                }
-                while(tempUser->atras!=NULL){
-                    tempUser=tempUser->atras;
-                    if(tempUser->nombre==usuarioN)
-                    {cout<<"usuario ya existenete\n";
-                        return tempUser;
-                    }
+            if(tempD->nombre==departamento){
+                NodoMatriz *tempU=tempE;
+                if(tempU->nombre==user){cout<<"usuario ya existenete\n"; return tempU;}
+                while(tempU->atras!=NULL){
+                    tempU=tempU->atras;
+                    if(tempU->nombre==user){cout<<"usuario ya existenete\n"; return tempU;}
                 }
             }
-            tempEmpre=tempEmpre->derecho;
+            tempE=tempE->derecho;
+
         }
     }
-    return NodoUsuario;
+    return userR;
+}
+NodoMatriz* Matriz::existeEmp(string empresa)
+{
+    NodoMatriz *userR=NULL;
+    NodoMatriz *empresaN;
+
+    empresaN= this->searchEmpresa(empresa);
+
+    if(empresaN!=NULL){
+        NodoMatriz *tempE=empresaN->derecho;
+
+        while(tempE!=NULL){
+
+            NodoMatriz *tempD=tempE->arriba;
+            while(tempD->arriba!=NULL){
+                tempD=tempD->arriba;
+            }
+
+                NodoMatriz *tempU=tempE;
+                return tempU;
+                cout<<"usuario ya existenete\n"<<tempU->nombre;
+                while(tempU->atras!=NULL){
+                    tempU=tempU->atras;
+                    return tempU;
+                cout<<"usuario ya existenete\n"<<tempU->nombre;
+                }
+
+            tempE=tempE->derecho;
+
+        }
+    }
+    return userR;
 }
 
-
-void Matriz::grafhMatriz(string nombre){
+void Matriz::graficarMatriz(string nombre){
     NodoMatriz *temp= this->root;
-    string cuerpoM="";
-    ofstream escribe;
-    escribe.open("matriz.dot", ios::out);
-    escribe << "digraph Sparce_Matrix { \n node [shape=box];\n";
-    cuerpoM+= to_string(temp->contador)+"[ label = \"root\", width = 1.5, style = filled, color = green, group = 1 ]; \n e0[ shape = point, width = 0 ]; \n e1[ shape = point, width = 0 ]; \n";
+    string prueba="";
+    ofstream grafica;
+    grafica.open("Prueba.dot", ios::out);
+    grafica << "digraph Sparce_Matrix { \n node [shape=box];\n";
+    prueba+= to_string(temp->contador)+"[ label = \"root\", width = 1.5, style = filled, color = firebrick1, group = 1 ]; \n e0[ shape = point, width = 0 ]; \n e1[ shape = point, width = 0 ]; \n";
 
     temp=temp->abajo;
 
     int e=0;
     while(temp!=NULL){
-        cuerpoM+= "\n /* Empresas */ \n";
-        cuerpoM+= to_string(temp->contador) + " [label = \"" + temp->nombre + "\"    pos = \"5.3,3.5!\" width = 1.5 style = filled, color = gray, group = 1 ]; \n" ;
+        prueba+= "\n /* Empresas */ \n";
+        prueba+= to_string(temp->contador) + " [label = \"" + temp->nombre + "\"    pos = \"5.3,3.5!\" width = 1.5 style = filled, color = coral1, group = 1 ]; \n" ;
         if(temp->derecho!=NULL){
             string rankF="{ rank = same; "+to_string(temp->contador);
             NodoMatriz *tempf= temp->derecho;
@@ -430,19 +416,19 @@ void Matriz::grafhMatriz(string nombre){
                 tempf= tempf->derecho;
             }
             rankF+=" }\n";
-            cuerpoM+=rankF;
+            prueba+=rankF;
 
             tempf= temp->derecho;
-            cuerpoM+= to_string(temp->contador)+" -> "+to_string(tempf->contador)+"\n" ;
-            cuerpoM+= to_string(tempf-> contador)+" -> "+to_string(temp->contador)+"\n" ;
+            prueba+= to_string(temp->contador)+" -> "+to_string(tempf->contador)+"\n" ;
+            prueba+= to_string(tempf-> contador)+" -> "+to_string(temp->contador)+"\n" ;
             while(tempf->derecho!=NULL){
-                cuerpoM+= to_string(tempf->contador)+" -> "+to_string(tempf->derecho->contador)+"\n" ;
-                cuerpoM+= to_string(tempf->derecho->contador)+" -> "+to_string(tempf->contador)+"\n" ;
+                prueba+= to_string(tempf->contador)+" -> "+to_string(tempf->derecho->contador)+"\n" ;
+                prueba+= to_string(tempf->derecho->contador)+" -> "+to_string(tempf->contador)+"\n" ;
                 tempf= tempf->derecho;
             }
         }
-        cuerpoM+= "e"+to_string(e)+"[ shape = point, width = 0 ];";
-        cuerpoM+= "{ rank = same; "+to_string(temp->contador)+"; e"+to_string(e)+" }";
+        prueba+= "e"+to_string(e)+"[ shape = point, width = 0 ];";
+        prueba+= "{ rank = same; "+to_string(temp->contador)+"; e"+to_string(e)+" }";
         e++;
         temp=temp->abajo;
 
@@ -451,9 +437,9 @@ void Matriz::grafhMatriz(string nombre){
     temp=this->root;
     temp=temp->abajo;
     while(temp->abajo!=NULL){
-        cuerpoM+= "\n   /* Enlacex entre empresas */ \n";
-        cuerpoM+= to_string(temp->contador)+" -> "+to_string(temp->abajo->contador)+"\n" ;
-        cuerpoM+= to_string(temp->abajo->contador)+" -> "+to_string(temp->contador)+"\n" ;
+        prueba+= "\n   /* Enlacex entre empresas */ \n";
+        prueba+= to_string(temp->contador)+" -> "+to_string(temp->abajo->contador)+"\n" ;
+        prueba+= to_string(temp->abajo->contador)+" -> "+to_string(temp->contador)+"\n" ;
         temp=temp->abajo;
     }
 
@@ -463,8 +449,8 @@ void Matriz::grafhMatriz(string nombre){
     int contadorg=1;
     while(temp!=NULL){
         contadorg++;
-        cuerpoM+= "\n /* Departamentos */ \n";
-        cuerpoM+= to_string(temp->contador)+ " [label = \""+ temp->nombre +"\"   width = 1.5 style = filled, color = darkolivegreen2, group ="+to_string(contadorg) +" ];\n";
+        prueba+= "\n /* Departamentos */ \n";
+        prueba+= to_string(temp->contador)+ " [label = \""+ temp->nombre +"\"   width = 1.5 style = filled, color = darkolivegreen2, group ="+to_string(contadorg) +" ];\n";
 
         if(temp->abajo!=NULL){
             NodoMatriz *tempc= temp->abajo;
@@ -476,15 +462,15 @@ void Matriz::grafhMatriz(string nombre){
                     usuarios+="<tr><td>"+ tempU->nombre +"</td></tr>";
                     tempU=tempU->atras;
                 }
-                cuerpoM+=to_string(tempc->contador)+" [label = <<table border = \"0\">"+usuarios+"</table>>, width = 1.5, group = "+to_string(contadorg) +" ];\n";
+                prueba+=to_string(tempc->contador)+" [label = <<table border = \"0\">"+usuarios+"</table>>, width = 1.5, group = "+to_string(contadorg) +" ];\n";
                 tempc= tempc->abajo;
             }
             tempc= temp->abajo;
-            cuerpoM+= to_string(temp->contador)+" -> "+to_string(tempc->contador)+"\n" ;
-            cuerpoM+= to_string(tempc->contador)+" -> "+to_string(temp->contador)+"\n" ;
+            prueba+= to_string(temp->contador)+" -> "+to_string(tempc->contador)+"\n" ;
+            prueba+= to_string(tempc->contador)+" -> "+to_string(temp->contador)+"\n" ;
             while(tempc->abajo!=NULL){
-                cuerpoM+= to_string(tempc->contador)+" -> "+to_string(tempc->abajo->contador)+"\n" ;
-                cuerpoM+= to_string(tempc->abajo->contador)+" -> "+to_string(tempc->contador)+"\n" ;
+                prueba+= to_string(tempc->contador)+" -> "+to_string(tempc->abajo->contador)+"\n" ;
+                prueba+= to_string(tempc->abajo->contador)+" -> "+to_string(tempc->contador)+"\n" ;
                 tempc=tempc->abajo;
             }
 
@@ -495,58 +481,58 @@ void Matriz::grafhMatriz(string nombre){
     temp=this->root;
     temp=temp->derecho;
     while(temp->derecho!=NULL){
-        cuerpoM+= "\n   /* Enlaces entre departamentos */ \n";
-        cuerpoM+= to_string(temp->contador)+" -> "+to_string(temp->derecho->contador) +"\n" ;
-        cuerpoM+= to_string(temp->derecho->contador)+" -> "+to_string(temp->contador) +"\n";
+        prueba+= "\n   /* Enlaces entre departamentos */ \n";
+        prueba+= to_string(temp->contador)+" -> "+to_string(temp->derecho->contador) +"\n" ;
+        prueba+= to_string(temp->derecho->contador)+" -> "+to_string(temp->contador) +"\n";
         temp=temp->derecho;
     }
-    cuerpoM+=to_string(temp->contador) + " -> e0 -> e1[ dir = none ];" ;
+    prueba+=to_string(temp->contador) + " -> e0 -> e1[ dir = none ];" ;
     temp=this->root;
 
-    cuerpoM+=to_string(temp->contador)+" -> "+to_string(temp->derecho->contador)+"\n";
-    cuerpoM+=to_string(temp->derecho->contador)+" -> "+to_string(temp->contador)+"\n";
-    cuerpoM+=to_string(temp->contador)+" -> "+to_string(temp->abajo->contador)+"\n";
-    cuerpoM+=to_string(temp->abajo->contador)+" -> "+to_string(temp->contador)+"\n";
+    prueba+=to_string(temp->contador)+" -> "+to_string(temp->derecho->contador)+"\n";
+    prueba+=to_string(temp->derecho->contador)+" -> "+to_string(temp->contador)+"\n";
+    prueba+=to_string(temp->contador)+" -> "+to_string(temp->abajo->contador)+"\n";
+    prueba+=to_string(temp->abajo->contador)+" -> "+to_string(temp->contador)+"\n";
 
-    cuerpoM+=" { rank = same; -1; ";
+    prueba+=" { rank = same; -1; ";
     temp=temp->derecho;
     while(temp!=NULL){
-        cuerpoM+=to_string(temp->contador)+"; ";
+        prueba+=to_string(temp->contador)+"; ";
         temp=temp->derecho;
     }
-    cuerpoM+=" }\n";
+    prueba+=" }\n";
     temp=this->root;
 
-    escribe << cuerpoM;
-    escribe << "}";
+    grafica << prueba;
+    grafica << "}";
 
-    escribe.close();
-nombre="matriz";
+    grafica.close();
+
     string creacion = "dot -Tjpg " + nombre + ".dot -o " + nombre + ".jpg";
     system(creacion.c_str());
     string title = nombre  + ".jpg";
 
 }
 
-NodoArbol* Matriz::BuscarActivo(string id){
-    NodoMatriz* aux1= this->root->derecho;
+NodoArbol* Matriz::serachActivo(string id){
+    NodoMatriz* tempNM= this->root->derecho;
 
-    while(aux1!=NULL){
+    while(tempNM!=NULL){
 
-        NodoMatriz* aux2= aux1->abajo;
-        while(aux2!=NULL){
+        NodoMatriz* tempU= tempNM->abajo;
+        while(tempU!=NULL){
 
-            NodoMatriz* aux3=aux2;
-            while(aux3!=NULL){
-                NodoArbol* activo= aux3->tAvl->buscarRaiz(aux3->tAvl->root,id);
+            NodoMatriz* tempU2=tempU;
+            while(tempU2!=NULL){
+                NodoArbol* activo= tempU2->tAvl->buscarRaiz(tempU2->tAvl->root,id);
                 if(activo!=NULL){
                     return activo;
                 }
-                aux3=aux3->atras;
+                tempU2=tempU2->atras;
             }
-            aux2=aux2->abajo;
+            tempU=tempU->abajo;
         }
-        aux1=aux1->derecho;
+        tempNM=tempNM->derecho;
     }
     return NULL;
 }
